@@ -1,12 +1,11 @@
 maintainer       "Yevgeniy Viktorov"
-maintainer_email "wik@rentasite.com.ua"
+maintainer_email "yeevgen@gmail.com"
 license          "Apache 2.0"
-description      "Installing magento stack"
+description      "Magento app stack"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          "0.3.1"
-recipe           "magento", "Install magento"
+recipe           "magento", "Prepare app stack for magento deployments"
 recipe           "magento::mysql", "Create mysql database for magento"
-recipe           "magento::sample_data", "Pre-populate magento with sample data"
 recipe           "magento::apache2", "Install apache2 webserver for magento"
 recipe           "magento::nginx", "Install nginx webserver for magento"
 
@@ -14,44 +13,34 @@ recipe           "magento::nginx", "Install nginx webserver for magento"
   supports os
 end
 
-%w{ apache2 nginx mysql openssl php }.each do |cb|
+%w{ apache2 nginx mysql openssl php php-fpm }.each do |cb|
   depends cb
 end
 
-attribute "magento/version",
-  :display_name => "Magento download version",
-  :description => "Version of Magento to download from the Magento site.",
-  :default => "stable"
-
-attribute "magento/downloader/url",
-  :display_name => "Magento downloader URL",
-  :description => "URL to magento downloader.",
-  :default => "http://www.magentocommerce.com/downloads/assets/1.3.2.1/magento-downloader-1.3.2.1.tar.gz"
-
-attribute "magento/downloader/checksum",
-  :display_name => "Magento downloader tarball checksum",
-  :description => "Checksum of the tarball for the magento downloader.",
-  :default => "91ccdebf0403f0c328cb728b4cd19504"
-  
 attribute "magento/dir",
   :display_name => "Magento installation directory",
   :description => "Location to place magento files.",
   :default => "/var/www/magento"
 
-attribute "magento/server/aliases",
-  :display_name => "Magento domain aliases",
-  :description => "Domain aliases magento can be serverd on",
+attribute "magento/gen_cfg",
+  :display_name => "Magento local.xml generator",
+  :description => "The weather the chef should generate local.xml file or leave it to someone also.",
+  :default => "true"
+
+attribute "magento/run_type",
+  :display_name => "MAGE_RUN_TYPE",
+  :description => "",
+  :default => "store"
+
+attribute "magento/run_codes",
+  :display_name => "MAGE_RUN_CODE",
+  :description => "Domain based run codes",
   :default => ""
 
-attribute "magento/server/static_domains",
-  :display_name => "Magento static domains",
-  :description => "Domains can be used to server static files",
-  :default => ""
-
-attribute "magento/server/secure_domain",
-  :display_name => "Magento secure domain",
-  :description => "Domain to serve magento over SSL",
-  :default => ""
+attribute "magento/user",
+  :display_name => "Magento server user",
+  :description => "The owner of magento installation directory",
+  :default => "magento"
 
 attribute "magento/db/database",
   :display_name => "Magento MySQL database",

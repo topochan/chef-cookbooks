@@ -3,13 +3,13 @@ include_recipe "percona::default"
 package "percona-server-server"
 
 def generate_id
-  Chef::Log.info "Percona server-id: #{node.percona.server_id}"
+  Chef::Log.info "Percona server-id: 1"
   begin
-    item = data_bag_item( "percona", "server-id" )
-    id = item['last-used'] + 1
-  rescue Net::HTTPServerException => e
+    ##item = data_bag_item( "percona", "server-id" )
+    #id = item['last-used'] + 1
+  #rescue Net::HTTPServerException => e
     id = 1
-    raise e unless e.response.code == "404"
+   # raise e unless e.response.code == "404"
   end
 
   item = Chef::DataBagItem.new
